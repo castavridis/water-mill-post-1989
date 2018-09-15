@@ -84,5 +84,15 @@ module.exports = {
     res.send('<Response><Message>' + message + '</Message></Response>');
     res.end();
     return res;
+  },
+  formatMessage: function(message) {
+    return '<Message>' + message + '</Message>';
+  },
+  formatMessages: function(messages) {
+    var _messages = "";
+    for (var i = 0; i < messages.length; i++) {
+      _messages += '<Message>' + messages[i] + '</Message>';
+    }
+    return _messages;
   }
 };

@@ -19,6 +19,7 @@ var User = require('./app/user');
 var Greetings = require('./app/greetings');
 var Personality = require('./app/personality');
 var Stories = require('./app/stories');
+var Weather = require('./app/weather');
 
 // Start app
 var app = express();
@@ -53,6 +54,51 @@ app.use(express.static('public'));
 app.get('/', function(req, res) {
   res.sendFile(__dirname+'/views/index.html');
 });
+
+app.get('/weather', function() {
+  Weather.fetchWeather();
+});
+
+function messageBuilder (req, res) {
+	var userPromise = User.find(req);
+  var message = req.body.Body;
+	userPromise.then(
+		function(result){
+			var user = result.user;
+			var isNew = result.status == 'NEW';
+		  	var responseBody = '';
+		  	var keyword = Utils.getKeyword(message);
+		  	if (isNew) {
+		  		responseBody += Greetings.disclaimer(user);
+		  		Personality.setZodiac('INFJ', user);
+		  	}
+		  	switch(keyword) {
+		  		case 'hello':
+		  			responseBody += Greetings.hello(user);
+		  		case 'ahoy':
+		  			responseBody += Greetings.ahoy(user);
+		  		case 'ciao':
+		  			responseBody += Greetings.ciao(user);
+		  		case 'creep':
+		  			responseBody += Stories.creep(user);
+		  		case 'swim':
+		  			responseBody += Stories.swim(user);
+		  		case 'shed':
+		  			responseBody += Stories.shed(user);
+		  		case 'sleep':
+		  			responseBody += Stories.sleep(user);
+		  		case 'hide':
+		  			responseBody += Stories.hide(user);
+		  		default:
+		  			responseBody += Greetings.help(user);
+		  	}
+		  	res.send('<Response>' + responseBody + '</Response>');
+		},
+		function(err) {
+			'Message Builder: Could not find or create user. ', err
+		}
+	);
+}
 
 app.post('/handshake', function(req, res) {
   var MessageLog = Parse.Object.extend("Message");
