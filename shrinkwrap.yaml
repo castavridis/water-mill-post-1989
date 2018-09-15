@@ -1,6 +1,7 @@
 dependencies:
   body-parser: 1.18.3
   express: 4.16.3
+  moment-timezone: 0.5.21
   parse: 2.1.0
   parse-server: 3.0.0
   request: 2.88.0
@@ -1121,6 +1122,16 @@ packages:
     resolution:
       integrity: sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
       tarball: 'http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz'
+  /moment-timezone/0.5.21:
+    dependencies:
+      moment: 2.22.2
+    dev: false
+    resolution:
+      integrity: sha512-j96bAh4otsgj3lKydm3K7kdtA3iKf2m6MY2iSYCzCm5a1zmHo1g+aK3068dDEeocLZQIS9kU8bsdQHLqEvgW0A==
+  /moment/2.22.2:
+    dev: false
+    resolution:
+      integrity: sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
   /mongodb-core/3.1.2:
     dependencies:
       bson: 1.1.0
@@ -2141,6 +2152,7 @@ shrinkwrapVersion: 3
 specifiers:
   body-parser: ^1.18.3
   express: ^4.16.3
+  moment-timezone: ^0.5.21
   parse: ^2.1.0
   parse-server: ^3.0.0
   request: ^2.88.0
