@@ -45,7 +45,9 @@ module.exports = {
   },
   getKeyword: function (text) {
     var _text = text.trim().replace(/[\W\d_]+/g, "").toLowerCase();
-    if (this.SPECIFIC_KEYWORDS.indexOf(_text) > -1) {
+    if (_text == 'test') {
+      return 'test';
+    } else if (this.SPECIFIC_KEYWORDS.indexOf(_text) > -1) {
       return _text;
     } else if (this.HELLO_KEYWORDS.indexOf(_text) > -1) {
       return 'hello';
@@ -81,5 +83,6 @@ module.exports = {
   sendMessage: function (res, message) {
     res.send('<Response><Message>' + message + '</Message></Response>');
     res.end();
+    return res;
   }
 };

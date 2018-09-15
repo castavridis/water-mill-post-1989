@@ -1,9 +1,12 @@
 // Following: https://www.twilio.com/blog/2017/04/playing-a-twitter-adventure-game-using-sms-and-twilio-on-glitch.html
 
 // Dependencies
+var btoa = require('btoa');
 var express = require('express');
 var request = require('request');
+var rp = require('request-promise');
 var bodyParser = require('body-parser');
+var moment = require('moment-timezone');
 var path = require('path');
 
 // Back-end
@@ -11,7 +14,6 @@ var Parse = require('parse/node');
 var ParseServer = require('parse-server').ParseServer;
 
 // Modules
-// TODO: Move to app.js
 var Utils = require('./app/utils');
 var User = require('./app/user');
 var Greetings = require('./app/greetings');
@@ -53,6 +55,12 @@ app.get('/', function(req, res) {
 });
 
 app.post('/handshake', function(req, res) {
+  var MessageLog = Parse.Object.extend("Message");
+  var messageLog = new MessageLog();
+  messageLog.set('phone', req.body.From);
+  messageLog.set('message', req.body.Body);
+  messageLog.save();
+  
   var userPromise = User.find(req);
   userPromise.then(
     function(result) {
@@ -62,51 +70,74 @@ app.post('/handshake', function(req, res) {
       if (result.status == 'NEW') {
         // Check for keywords
         
+        // Send disclaimer
         Greetings.disclaimer(req, res);
         
-        var keyword = Utils.getKeyword(message);
-        if(keyword != false) {
-          switch(keyword) {
-            case 'hello':
-              Greetings.hello(req, res);
-            case 'ahoy':
-              Greetings.ahoy(req, res);
-            case 'ciao':
-              Greetings.ciao(req, res);
-            default:
-              Greetings.help(req, res);
-          }
-        } else {
-          Greetings.help(req, res);
-        }
         // Send salutation
-        // Send disclaimer
+        var keyword = Utils.getKeyword(message);
+        switch(keyword) {
+          case 'test':
+            res.send('<Response><Message>One</Message><Message>Two</Message><Say>Three</Say></Response>');
+          case 'hello':
+            Greetings.hello(req, res);
+          case 'ahoy':
+            Greetings.ahoy(req, res);
+          case 'ciao':
+            Greetings.ciao(req, res);
+          case 'creep':
+            Stories.creep(req, res);
+          case 'swim':
+            Stories.swim(req, res);
+          case 'shed':
+            Stories.shed(req, res);
+          case 'sleep':
+            Stories.sleep(req, res);
+          case 'hide':
+            Stories.hide(req, res);
+          default:
+            Greetings.help(req, res);
+        }
+        
         // Send personality sequence
+        Personality.setZodiac('INFJ', result.user);
+        
         // Send weather sequence
+        
+        
       }
       // If user, determine place in timeline
       else {
         var keyword = Utils.getKeyword(message);
-        if(keyword != false) {
-          switch(keyword) {
-            case 'hello':
-              Greetings.hello(req, res);
-            case 'ahoy':
-              Greetings.ahoy(req, res);
-            case 'ciao':
-              Greetings.ciao(req, res);
-            default:
-              Greetings.help(req, res);
-          }
-        } else {
-          Greetings.help(req, res);
-        }
         // Check for keywords
         // Update check-ins in timeline
         // Follow story sequences
-        // If end of timeline
-          // Send valediction
-          // Send colophon    
+        switch(keyword) {
+          case 'test':
+            res.send('<Response><Message>One</Message><Pause length="20"></Pause><Message>Two</Message><Say>Three</Say></Response>');
+          case 'hello':
+            Greetings.hello(req, res);
+          case 'ahoy':
+            Greetings.ahoy(req, res);
+          case 'ciao':
+            Greetings.ciao(req, res);
+          case 'creep':
+            Stories.creep(req, res);
+          case 'swim':
+            Stories.swim(req, res);
+          case 'shed':
+            Stories.shed(req, res);
+          case 'sleep':
+            Stories.sleep(req, res);
+          case 'hide':
+            Stories.hide(req, res);
+          case 'bye':
+            // If end of timeline
+              // Send valediction
+              // Send colophon    
+            Greetings.bye(req, res);
+          default:
+            Greetings.help(req, res);
+        }
       }
       return;
     },
@@ -115,37 +146,3 @@ app.post('/handshake', function(req, res) {
     }
   );
 });
-
-// Test Endpoints
-// Use ?phone=+19287133945
-app.get('/help', function(req, res) {    
-  var userPromise = User.find(false);
-  userPromise.then(function(results){
-    Personality.setZodiac('INFJ', results.user);
-    Greetings.help(req, res);
-  },
-  function(error){
-    console.log('/help: Could not get/create user.');
-  });
-});
-
-app.get('/hello', function(req, res) {
-  Greetings.hello(req, res);
-});
-
-app.get('/ahoy', function(req, res) {
-  Greetings.ahoy(req, res);
-});
-
-app.post('/creep', function(req, res) {
-});
-
-app.post('/swim', function(req, res) {});
-
-app.post('/shed', function(req, res) {});
-
-app.post('/sleep', function(req, res) {});
-
-app.post('/hide', function(req, res) {});
-
-app.post('/goodbye', function(req, res) {});

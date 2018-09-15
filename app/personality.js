@@ -62,7 +62,13 @@ module.exports = {
     return horoscope;
   },
   setZodiac: function (mbti, user) {
-    var zodiac = MBTI_ZODIAC[mbti.toUpperCase()];
+    // IGNORE mbti;
+    var _mbti = '';
+    _mbti += Utils.flipCoin() ? 'I' : 'E';
+    _mbti += Utils.flipCoin() ? 'N' : 'S';
+    _mbti += Utils.flipCoin() ? 'F' : 'T';
+    _mbti += Utils.flipCoin() ? 'J' : 'P';
+    var zodiac = MBTI_ZODIAC[_mbti.toUpperCase()];
     User.setZodiac(zodiac, user);
     this.fetchHoroscope(zodiac, user);
   },

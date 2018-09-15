@@ -260,11 +260,16 @@ module.exports = {
     query.equalTo(VISITOR_PRIMARY_KEY, phone);
   },
   setDichotomy: function (dichotomy, value, user) {
-    console.log(user);
+    // console.log(user);
   },
   setZodiac: function (zodiac, user) {
     // get dichotomies
     // associate to personality
+    if (user != false) {
+      user.set('zodiac', zodiac);
+      user.save();
+    }
+    return user;
   },
   setHoroscope: function (horoscope, user) {
     if (user != false) {
