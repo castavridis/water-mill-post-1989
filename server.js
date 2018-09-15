@@ -15,6 +15,8 @@ var ParseServer = require('parse-server').ParseServer;
 var Utils = require('./app/utils');
 var User = require('./app/user');
 var Greetings = require('./app/greetings');
+var Personality = require('./app/personality');
+var Stories = require('./app/stories');
 
 // Start app
 var app = express();
@@ -51,35 +53,80 @@ app.get('/', function(req, res) {
 });
 
 app.post('/handshake', function(req, res) {
-  console.log(req);
-  var user = User.find(req);
-  var message = req.body.Body;
-  // If not user, make user
-  if (!user) {
-    // Check for keywords
-    if(Utils.getKeyword(message) != false) {
+  var userPromise = User.find(req);
+  userPromise.then(
+    function(result) {
+      var message = req.body.Body;
+
+      // If not user, make user
+      if (result.status == 'NEW') {
+        // Check for keywords
+        
+        Greetings.disclaimer(req, res);
+        
+        var keyword = Utils.getKeyword(message);
+        if(keyword != false) {
+          switch(keyword) {
+            case 'hello':
+              Greetings.hello(req, res);
+            case 'ahoy':
+              Greetings.ahoy(req, res);
+            case 'ciao':
+              Greetings.ciao(req, res);
+            default:
+              Greetings.help(req, res);
+          }
+        } else {
+          Greetings.help(req, res);
+        }
+        // Send salutation
+        // Send disclaimer
+        // Send personality sequence
+        // Send weather sequence
+      }
+      // If user, determine place in timeline
+      else {
+        var keyword = Utils.getKeyword(message);
+        if(keyword != false) {
+          switch(keyword) {
+            case 'hello':
+              Greetings.hello(req, res);
+            case 'ahoy':
+              Greetings.ahoy(req, res);
+            case 'ciao':
+              Greetings.ciao(req, res);
+            default:
+              Greetings.help(req, res);
+          }
+        } else {
+          Greetings.help(req, res);
+        }
+        // Check for keywords
+        // Update check-ins in timeline
+        // Follow story sequences
+        // If end of timeline
+          // Send valediction
+          // Send colophon    
+      }
+      return;
+    },
+    function(result) {
+      return;
     }
-    // Send salutation
-    // Send disclaimer
-    // Send personality sequence
-    // Send weather sequence
-  }
-  // If user, determine place in timeline
-  else {
-    // Check for keywords
-    // Update check-ins in timeline
-    // Follow story sequences
-    // If end of timeline
-      // Send valediction
-      // Send colophon    
-  }
+  );
 });
 
 // Test Endpoints
 // Use ?phone=+19287133945
-app.get('/help', function(req, res) {
-  console.log(req.query);
-  Greetings.help(req, res);
+app.get('/help', function(req, res) {    
+  var userPromise = User.find(false);
+  userPromise.then(function(results){
+    Personality.setZodiac('INFJ', results.user);
+    Greetings.help(req, res);
+  },
+  function(error){
+    console.log('/help: Could not get/create user.');
+  });
 });
 
 app.get('/hello', function(req, res) {

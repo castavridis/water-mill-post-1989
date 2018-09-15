@@ -2,12 +2,47 @@ var moment = require('moment-timezone');
 
 // TODO: Add emoji support.
 
+var DEFAULT_ASSOCIATES_LENGTH = 5;
+var DEFAULT_ASSOCIATES = ['The Gadget Gurls','Adare','Anna','Charlie','Chloe','Christine','Claire','Clement','Clio','Devra','Edo','Elana','Elizabeth','Emma','Emmy','Free','Geige','Hailey','Hamzat','Jack','Jim','Jordan','Katie','Lydia','Mariana','Marina','Megan','MJ','Moriah','Neena','Neil','Nicole','Rachel','Rebecca','Sarah','Sean','Shane','Shannon','So','Stephanie','Tom','Tyler','Xinyi','Zoe'];  
+
 module.exports = {
   CIAO_KEYWORDS: ['👋','👋🏻','👋🏼','👋🏽','👋🏾','👋🏿'],
   HELLO_KEYWORDS: ['hi', 'hey', 'heya', 'heyyy', 'ayo', 'hello', 'hay', 'sup', 'hallo'],
   SPECIFIC_KEYWORDS: ['ahoy', 'creep', 'swim', 'shed', 'sleep', 'hide'],
   BYE_KEYWORDS: ['bye', 'goodbye', 'bai', 'byebye', 'bye bye', 'byeee'],
-  DEFAULT_ASSOCIATES: ['The Gadget Gurls', 'Adare','Anna','Charlie','Chloe','Christine','Claire','Clement','Clio','Devra','Edo','Elana','Elizabeth','Emma','Emmy','Free','Geige','Hailey','Hamzat','Jack','Jim','Jordan','Katie','Lydia','Mariana','Marina','Megan','MJ','Moriah','Neena','neil','Nicole','Rachel','Rebecca','Sarah','Sean','Shane','Shannon','So','Stephanie','Tom','Tyler','Xinyi','Zoe'],
+  flipCoin: function () {
+    return (Math.random() >= 0.5);
+  },
+  getAssociates: function (data) {
+    var associates = DEFAULT_ASSOCIATES.slice();
+    var _associates = [];
+    var associateLength = DEFAULT_ASSOCIATES_LENGTH;
+    try {
+      var addOns = data.AddOns.results;
+      if (addOns) {
+        var whitePages = addOns.whitepages_pro_caller_id.result;
+        if (whitePages) {
+          var associatedPeople = whitePages.associated_people;
+          for(var i = 0; i < associatedPeople.length && i < DEFAULT_ASSOCIATES_LENGTH; i++) {
+            _associates.push(associatedPeople[i].firstname);
+          }
+          associateLength -= _associates.length;
+        }
+        else {throw 'No White Pages.';}
+      }
+      else {throw 'No AddOn.';}
+      
+    }
+    catch(err) {
+      // do nothing.
+    }
+    for (var i = 0; i < associateLength; i++) {
+      var associate = Math.floor(Math.random() * associates.length);
+      _associates.push(associates[associate]);
+      // NOTE: Probably should remove already used associate. Causes a race condition in loop.
+    }
+    return _associates;
+  },
   getKeyword: function (text) {
     var _text = text.trim().replace(/[\W\d_]+/g, "").toLowerCase();
     if (this.SPECIFIC_KEYWORDS.indexOf(_text) > -1) {
@@ -40,10 +75,11 @@ module.exports = {
   },
   getTime: function () {
     var timeShift = Math.ceil(Math.random() * 15);
-    timeShift = (Math.random() >= 0.5) ? -timeShift : timeShift;
+    timeShift = (this.flipCoin()) ? -timeShift : timeShift;
     return moment.tz(new Date(), "America/New_York").add(timeShift, 'minutes').format('LT');
   },
   sendMessage: function (res, message) {
     res.send('<Response><Message>' + message + '</Message></Response>');
+    res.end();
   }
 };

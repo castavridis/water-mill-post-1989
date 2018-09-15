@@ -1,10 +1,13 @@
 dependencies:
+  asyncawait: 1.0.7
   body-parser: 1.18.3
+  btoa: 1.2.1
   express: 4.16.3
   moment-timezone: 0.5.21
   parse: 2.1.0
   parse-server: 3.0.0
   request: 2.88.0
+  request-promise: 4.2.2
 packages:
   /@babel/runtime/7.0.0:
     dependencies:
@@ -145,6 +148,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==
+  /asyncawait/1.0.7:
+    dependencies:
+      bluebird: 3.5.2
+      fibers: 2.0.2
+      lodash: 4.17.11
+    dev: false
+    resolution:
+      integrity: sha512-jWRlXdzpj90/bbgA6cy4BbTHFEBk+RQpFQHiCuy9/rp0OB07pBYWVRWoT4Garf0fZRC/nzA6OhN5xC0wpoxKjw==
   /asynckit/0.4.0:
     dev: false
     resolution:
@@ -207,6 +218,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-mrVie5PmBiH/fNrF2pczAn3x0Ms=
+  /bluebird/3.5.2:
+    dev: false
+    resolution:
+      integrity: sha512-dhHTWMI7kMx5whMQntl7Vr9C6BvV10lFXDAasnqnrMYhXVCzzk6IO9Fo2L75jXHT07WrOngL1WDXOp+yYS91Yg==
   /body-parser/1.18.2:
     dependencies:
       bytes: 3.0.0
@@ -263,6 +278,13 @@ packages:
       node: '>=0.6.19'
     resolution:
       integrity: sha512-9Aeai9TacfNtWXOYarkFJRW2CWo+dRon+fuLZYJmvLV3+MiUp0bEI6IAZfXEIg7/Pl/7IWlLaDnhzTsD81etQA==
+  /btoa/1.2.1:
+    dev: false
+    engines:
+      node: '>= 0.4.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==
   /buffer-equal-constant-time/1.0.1:
     dev: false
     resolution:
@@ -639,6 +661,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
+  /fibers/2.0.2:
+    dev: false
+    engines:
+      node: '>=0.5.2'
+    requiresBuild: true
+    resolution:
+      integrity: sha512-HfVRxhYG7C8Jl9FqtrlElMR2z/8YiLQVDKf67MLY25Ic+ILx3ecmklfT1v3u+7P5/4vEFjuxaAFXhr2/Afwk5g==
   /file-uri-to-path/1.0.0:
     dev: false
     resolution:
@@ -1583,6 +1612,29 @@ packages:
     dev: false
     resolution:
       integrity: sha512-odxIc1/vDlo4iZcfXqRYFj0vpXFNoGdKMAUieAlFYO6m/nl5e9KR/beGf41z4a1FI+aQgtjhuaSlDxQ0hmkrHg==
+  /request-promise-core/1.1.1:
+    dependencies:
+      lodash: 4.17.11
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha1-Pu4AssWqgyOc+wTFcA2jb4HNCLY=
+  /request-promise/4.2.2:
+    dependencies:
+      bluebird: 3.5.2
+      request-promise-core: 1.1.1
+      stealthy-require: 1.1.1
+      tough-cookie: 2.4.3
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha1-0epG1lSm7k+O5qT+oQGMIpEZBLQ=
   /request/2.85.0:
     dependencies:
       aws-sign2: 0.7.0
@@ -1877,6 +1929,12 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+  /stealthy-require/1.1.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
   /string-width/1.0.2:
     dependencies:
       code-point-at: 1.1.0
@@ -2150,9 +2208,12 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
+  asyncawait: ^1.0.7
   body-parser: ^1.18.3
+  btoa: ^1.2.1
   express: ^4.16.3
   moment-timezone: ^0.5.21
   parse: ^2.1.0
   parse-server: ^3.0.0
   request: ^2.88.0
+  request-promise: ^4.2.2

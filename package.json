@@ -15,7 +15,10 @@
     "body-parser": "^1.18.3",
     "parse": "^2.1.0",
     "parse-server": "^3.0.0",
-    "moment-timezone": "^0.5.21"
+    "moment-timezone": "^0.5.21",
+    "btoa": "^1.2.1",
+    "request-promise": "^4.2.2",
+    "asyncawait": "^1.0.7"
   },
   "engines": {
     "node": "8.x"
