@@ -1,11 +1,11 @@
 // salutation.js
 
 module.exports = {
-  hello: function ( ) {
+  hello: function (req, res) {
     console.log('hello!!');
-    return 'Hello!!';
+    res.send('<Response><Message>Hello!!</Message></Response>');
   },
-  ahoy: function( ) {
+  ahoy: function(req, res) {
     console.log('ahoy!!');
     return 'Ahoy!!';
   }

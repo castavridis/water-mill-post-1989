@@ -4,10 +4,13 @@
 var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
-var firebase = require('firebase');
 
 // Modules
-var salutations = require('./salutations');
+var User = require('./user');
+var Salutations = require('./salutations');
+
+// Back-end
+var Parse = require('parse/node');
 
 var app = express();
 
@@ -24,15 +27,22 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname+'/views/index.html');
 });
 
-app.post('/hello', function(req, res) {
-  console.log(req.body);
-  res.send('<Response><Message>' + salutations.hello() + '</Message></Response>');
+app.get('/hello', function(req, res) {
+  Salutations.hello(req, res);
 });
 
-app.post('/ahoy', function(req, res) {});
+app.get('/ahoy', function(req, res) {
+  Salutations.ahoy(req, res);
+});
+
 app.post('/creep', function(req, res) {});
+
 app.post('/swim', function(req, res) {});
+
 app.post('/shed', function(req, res) {});
+
 app.post('/sleep', function(req, res) {});
+
 app.post('/hide', function(req, res) {});
+
 app.post('/goodbye', function(req, res) {});
