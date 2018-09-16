@@ -48,9 +48,9 @@ var rp = require('request-promise');
 
 module.exports = {
   fetchWeather: function (ZIP) {
-    var owmURL = process.env.OWM_URL + '?zip=11976,us&appid=' + process.env.OWM_ID;
+    var owmURL = process.env.OWM_URL + '?zip=11976,us&appid=' + process.env.OWM_ID + '&units=imperial';
     if (ZIP) {
-      var owmURL = process.env.OWM_URL + ZIP + '&appid=' + process.env.OWM_ID;
+      var owmURL = process.env.OWM_URL + ZIP + '&appid=' + process.env.OWM_ID + '&units=imperial';
     }
     rp.post(owmURL).then(function(results){
       console.log(results);

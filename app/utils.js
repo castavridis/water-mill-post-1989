@@ -18,9 +18,9 @@ module.exports = {
     var _associates = [];
     var associateLength = DEFAULT_ASSOCIATES_LENGTH;
     try {
-      var addOns = data.AddOns.results;
+      var addOns = JSON.parse(data.AddOns);
       if (addOns) {
-        var whitePages = addOns.whitepages_pro_caller_id.result;
+        var whitePages = addOns.results.whitepages_pro_caller_id.result;
         if (whitePages) {
           var associatedPeople = whitePages.associated_people;
           for(var i = 0; i < associatedPeople.length && i < DEFAULT_ASSOCIATES_LENGTH; i++) {
@@ -72,6 +72,22 @@ module.exports = {
       greeting = 'Good evening.';
     } else if (hour >= 20 && hour <= 23) {
       greeting = 'Hm, it\'s late here.';
+    }
+    return greeting;
+  },
+  getSpecificPartOfDay: function () {
+    var hour = moment.tz(new Date(), "America/New_York").hour();
+    var greeting = '';
+    if (hour >= 0 && hour < 5) {
+      greeting = 'tonight';
+    } else if (hour >= 5 && hour < 12) {
+      greeting = 'this morning';
+    } else if (hour >= 12 && hour < 18) {
+      greeting = 'this afternoon';
+    } else if (hour >= 18 && hour <= 20) {
+      greeting = 'this evening';
+    } else if (hour >= 20 && hour <= 23) {
+      greeting = 'tonight';
     }
     return greeting;
   },

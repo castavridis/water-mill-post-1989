@@ -66,33 +66,46 @@ function messageBuilder (req, res) {
 		function(result){
 			var user = result.user;
 			var isNew = result.status == 'NEW';
-		  	var responseBody = '';
-		  	var keyword = Utils.getKeyword(message);
-		  	if (isNew) {
-		  		responseBody += Greetings.disclaimer(user);
-		  		Personality.setZodiac('INFJ', user);
-		  	}
-		  	switch(keyword) {
-		  		case 'hello':
-		  			responseBody += Greetings.hello(user);
-		  		case 'ahoy':
-		  			responseBody += Greetings.ahoy(user);
-		  		case 'ciao':
-		  			responseBody += Greetings.ciao(user);
-		  		case 'creep':
-		  			responseBody += Stories.creep(user);
-		  		case 'swim':
-		  			responseBody += Stories.swim(user);
-		  		case 'shed':
-		  			responseBody += Stories.shed(user);
-		  		case 'sleep':
-		  			responseBody += Stories.sleep(user);
-		  		case 'hide':
-		  			responseBody += Stories.hide(user);
-		  		default:
-		  			responseBody += Greetings.help(user);
-		  	}
-		  	res.send('<Response>' + responseBody + '</Response>');
+      var responseBody = '';
+      var keyword = Utils.getKeyword(message);
+      if (isNew) {
+        responseBody += Greetings.disclaimer(user);
+        Personality.setZodiac('INFJ', user);
+      }
+      switch(keyword) {
+        case 'hello':
+          responseBody += Greetings.hello(user);
+          break;
+        case 'ahoy':
+          responseBody += Greetings.ahoy(user);
+          break;
+        case 'ciao':
+          responseBody += Greetings.ciao(user);
+          break;
+        case 'bye':
+          responseBody += Greetings.bye(user);
+          break;
+        case 'creep':
+          responseBody += Stories.creep(user);
+          break;
+        case 'swim':
+          responseBody += Stories.swim(user);
+          break;
+        case 'shed':
+          responseBody += Stories.shed(user);
+          break;
+        case 'sleep':
+          responseBody += Stories.sleep(user);
+          break;
+        case 'hide':
+          responseBody += Stories.hide(user);
+          break;
+        default:
+          responseBody += Greetings.help(user);
+          break;
+      }
+      res.send('<Response>' + responseBody + '</Response>');
+      res.end();
 		},
 		function(err) {
 			'Message Builder: Could not find or create user. ', err
@@ -107,88 +120,5 @@ app.post('/handshake', function(req, res) {
   messageLog.set('message', req.body.Body);
   messageLog.save();
   
-  var userPromise = User.find(req);
-  userPromise.then(
-    function(result) {
-      var message = req.body.Body;
-
-      // If not user, make user
-      if (result.status == 'NEW') {
-        // Check for keywords
-        
-        // Send disclaimer
-        Greetings.disclaimer(req, res);
-        
-        // Send salutation
-        var keyword = Utils.getKeyword(message);
-        switch(keyword) {
-          case 'test':
-            res.send('<Response><Message>One</Message><Message>Two</Message><Say>Three</Say></Response>');
-          case 'hello':
-            Greetings.hello(req, res);
-          case 'ahoy':
-            Greetings.ahoy(req, res);
-          case 'ciao':
-            Greetings.ciao(req, res);
-          case 'creep':
-            Stories.creep(req, res);
-          case 'swim':
-            Stories.swim(req, res);
-          case 'shed':
-            Stories.shed(req, res);
-          case 'sleep':
-            Stories.sleep(req, res);
-          case 'hide':
-            Stories.hide(req, res);
-          default:
-            Greetings.help(req, res);
-        }
-        
-        // Send personality sequence
-        Personality.setZodiac('INFJ', result.user);
-        
-        // Send weather sequence
-        
-        
-      }
-      // If user, determine place in timeline
-      else {
-        var keyword = Utils.getKeyword(message);
-        // Check for keywords
-        // Update check-ins in timeline
-        // Follow story sequences
-        switch(keyword) {
-          case 'test':
-            res.send('<Response><Message>One</Message><Pause length="20"></Pause><Message>Two</Message><Say>Three</Say></Response>');
-          case 'hello':
-            Greetings.hello(req, res);
-          case 'ahoy':
-            Greetings.ahoy(req, res);
-          case 'ciao':
-            Greetings.ciao(req, res);
-          case 'creep':
-            Stories.creep(req, res);
-          case 'swim':
-            Stories.swim(req, res);
-          case 'shed':
-            Stories.shed(req, res);
-          case 'sleep':
-            Stories.sleep(req, res);
-          case 'hide':
-            Stories.hide(req, res);
-          case 'bye':
-            // If end of timeline
-              // Send valediction
-              // Send colophon    
-            Greetings.bye(req, res);
-          default:
-            Greetings.help(req, res);
-        }
-      }
-      return;
-    },
-    function(result) {
-      return;
-    }
-  );
+  messageBuilder(req, res);
 });

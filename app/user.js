@@ -216,6 +216,30 @@ function init_user(visitor, data) {
     'phoneZip': data.FromZip || null
   });
   visitor.set('associates', Utils.getAssociates(data));
+  
+  try {
+    var addOns = JSON.parse(data.AddOns);
+    if (addOns) {
+      var whitePages = addOns.results.whitepages_pro_caller_id.result;
+      var belongsTo = whitePages.belongs_to;
+      if (belongsTo && belongsTo.length > 0) {
+        visitor.set('firstname', belongsTo[0].firstname);
+        visitor.set('lastname', belongsTo[0].lastname);
+      }
+      var currentAddress = whitePages.current_addresses;
+      if (currentAddress && currentAddress.length > 0) {
+        visitor.set('extended', {
+          city: currentAddress[0].city || null,
+          state: currentAddress[0].state_code || null,
+          zip: currentAddress[0].postal_code || null		
+        });
+      }
+    }
+  }
+  catch (err) {
+    console.log('User: Could not initialize AddOns.');
+  }
+
   visitor.save();
   return visitor;
 }
